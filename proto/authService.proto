@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package pb;
+option go_package = "project/pb";
+import "google/api/annotations.proto";
+
+// SignUp
+message SignUpInput {
+    string name = 1;
+    string email = 2;
+    string password = 3;
+    string passwordConfirm = 4;
+}
+
+// SignIn
+message SignInInput {
+    string email = 1;
+    string password = 2;
+}
+
+message TokenResponse{
+    string accessToken=1;
+    string refreshToken=2;
+    string status=3;
+    string message=4;
+}
+
+message Response {
+    string status = 1;
+    string message = 2;
+}
+
+// VerifyUser
+message VerifyUserRequest {
+    string verificationCode = 1;
+}
+
+// Forgot
+message ForgotPasswordRequest {
+    string email = 1;
+}
+
+// Reset
+message ResetPasswordModel {
+    string password = 1;
+    string passwordConfirm = 2;
+}
+
+message ResetPasswordRequest {
+    string resetCode = 1;
+    ResetPasswordModel req = 2;
+}
+
+service AuthService {
+    rpc SignUpUser (SignUpInput) returns (Response) {
+        option (google.api.http) = {
+            post: "/auth/register"
+            body: "*"
+        };
+    }
+    rpc SignInUser (SignInInput) returns (TokenResponse) {
+        option (google.api.http) = {
+            post: "/auth/login"
+            body: "*"
+        };
+    }
+    rpc VerifyUser (VerifyUserRequest) returns (Response) {
+        option (google.api.http) = {
+            get: "/auth/verifyUser/{verificationCode}"
+        };
+    }
+    rpc ForgotPassword (ForgotPasswordRequest) returns (Response) {
+        option (google.api.http) = {
+            post: "/auth/forgot"
+            body: "*"
+        };
+    }
+    rpc ResetPassword (ResetPasswordRequest) returns (Response) {
+        option (google.api.http) = {
+            patch: "/auth/resetPassword/{resetCode}"
+            body: "req"
+        };
+    }
+    rpc practiceChecker(SignUpInput) returns (Response) {
+        option (google.api.http) = {
+            post: "/auth/practice"
+            body: "*"
+        };
+    }
+}

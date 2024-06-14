@@ -1,0 +1,2 @@
+protoc -I ./proto --go_out ./generated/pb --go_opt paths=source_relative --go-grpc_out ./generated/pb --
+go-grpc_opt paths=source_relative --grpc-gateway_out ./generated/pb --grpc-gateway_opt paths=source_relative ./proto/authService.proto
